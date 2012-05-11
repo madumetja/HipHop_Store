@@ -1,0 +1,49 @@
+<h1>Your Cart</h1>
+
+<% if @cart.empty? %>
+    <p>Your Cart is empty.</p>
+<% end %>
+
+<% total = 0 %>
+<table class="cart">
+    <tr>
+        <td class="legend"></td>
+        <td class="legend">Item</td>
+        <td class="legend">Price</td>
+        <td class="legend">Qty</td>
+        <td class="legend">Total</td>
+    </tr>
+	
+<% @cart.each do | id, quantity | %>
+    <% music = Music.find_by_id(id) %>
+    <tr>
+        <td>
+            <div class="image">
+                <%= link_to (image_tag music.image_url), music %>
+            </div>
+        </td>
+        <td class="title"><%= link_to music.title, music %></td>
+        <td class="price"><%= number_to_currency(music.price) %></td>
+        <td class="quantity"><%= quantity %><br /></td>
+        <td class="price">
+        <%= number_to_currency(quantity * music.price, :unit => "£") %>
+    </td>
+    </tr>
+    <% total += quantity * music.price %>
+<% end %>
+
+    <tr>
+        <td colspan="4">
+            <div class="total">Total:</div>
+        </td>
+        <td>
+            <div class="price"><%= number_to_currency(total, :unit => "£") %></div>
+        </td>
+    </tr>
+</table>
+
+<p>
+    <%= link_to 'Proceed to Checkout', :action => :checkout %> |
+    <%= link_to 'Continue Shopping', :controller => :musics %>
+</p>
+
